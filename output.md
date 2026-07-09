@@ -1169,13 +1169,13 @@ although both signals have been subjected to oversampling and averaging
 which is discussed in the next section.
 
 <figure>
-<img src="assets/media/image19.emf"
+<img src="assets/media/image19.png"
 style="width:7.64126in;height:3.51163in" />
 <figcaption><p>Fig Raw signal data without breathing</p></figcaption>
 </figure>
 
 <figure>
-<img src="assets/media/image20.emf"
+<img src="assets/media/image20.png"
 style="width:7.69767in;height:3.70386in" />
 <figcaption><p>Fig Raw signal data with breathing</p></figcaption>
 </figure>
@@ -1236,7 +1236,7 @@ signal, sampled at 50 Hz for a period of 10 seconds, without the
 implementation of this technique.
 
 <figure>
-<img src="assets/media/image22.emf"
+<img src="assets/media/image22.png"
 style="width:8.125in;height:3.67992in" />
 <figcaption><p>Fig Heartbeat signal without Oversampling &amp;
 Averaging</p></figcaption>
@@ -1247,7 +1247,7 @@ averaging factor *m* is 60. This produces a pseudo sampled digital
 signal at 50 Hz. It is clear to see the improved resolution.
 
 <figure>
-<img src="assets/media/image23.emf"
+<img src="assets/media/image23.png"
 style="width:8.125in;height:3.67992in" />
 <figcaption><p>Fig Heartbeat signal with Oversampling &amp;
 Averaging</p></figcaption>
@@ -1260,67 +1260,39 @@ samples and assigning to a non-arbitrary index in this vector.
 
 The following MATLAB script carries out this operation:
 
+``` matlab
 TIME = 10; % Sampling period
-
 SAMPLING_RATE = 3000;
-
 M = 60; % Averaging factor
-
 % DAQ function
-
-\[data,time\] = DAQ_signal_in(TIME,10,SAMPLING_RATE,M);
-
+[data,time] = DAQ_signal_in(TIME,10,SAMPLING_RATE,M);
 % Extraction of in-phase and quadrature components
-
-N = TIME\*SAMPLING_RATE;
-
+N = TIME*SAMPLING_RATE;
 data_I = data(1:N,1);
-
 data_Q = data(1:N,2);
-
 % Creation of zero vectors
-
 average_I = zeros(N/M,1);
-
 average_Q = zeros(N/M,1);
-
 % for loop which averages and assigns samples to a vector index
-
 for k=1:((N/M)-1)
-
-index=k\*M;
-
+index=k*M;
 average_I(k)=sum(data_I(index:index+M))/M;
-
 average_Q(k)=sum(data_Q(index:index+M))/M;
-
 end
-
 % Re-assigning the data vectors
-
 data_I = average_I;
-
 data_Q = average_Q;
-
 % Sizing the vectors to avoid drop-off
-
-data_I = data_I(1:end-(2\*SAMPLING_RATE/M));
-
-data_Q = data_Q(1:end-(2\*SAMPLING_RATE/M));
-
+data_I = data_I(1:end-(2*SAMPLING_RATE/M));
+data_Q = data_Q(1:end-(2*SAMPLING_RATE/M));
 data_I(end) = data_I(end-1);
-
 data_Q(end) = data_Q(end-1);
-
 % Mean removal
-
 data_I = data_I-mean(data_I);
-
 data_Q = data_Q-mean(data_Q);
-
 % Ensures time vector is the same length as new data vectors
-
 time = time(1:max(size(data_I)));
+```
 
 ### Spectrum Analysis
 
@@ -1331,7 +1303,7 @@ Fast Fourier Transform (FFT). Figure 23 shows the I-Channel and its
 respective frequency spectrum.
 
 <figure>
-<img src="assets/media/image24.emf"
+<img src="assets/media/image24.png"
 style="width:8.21904in;height:4.55844in" />
 <figcaption><p>Fig 23 (a) I-Channel Signal (b) I-Channel Frequency
 Spectrum</p></figcaption>
@@ -1349,7 +1321,7 @@ the Q-Channel and its respective frequency spectrum. Again, the
 prominent peak in the 1 to 1.7 Hz range is expected.
 
 <figure>
-<img src="assets/media/image25.emf"
+<img src="assets/media/image25.png"
 style="width:8.21212in;height:4.29167in" />
 <figcaption><p>Fig (a) Q-Channel Signal (b) Q-Channel Frequency
 Spectrum</p></figcaption>
@@ -1364,27 +1336,19 @@ channel will provide the most accurate result.
 
 This method is implemented in MATLAB using the following code:
 
+``` matlab
 % The frequency range and resolution is calculated
-
 dF = (SAMPLING_RATE/M)/max(size(time));
-
 f = 0:dF:SAMPLING_RATE/M-dF;
-
 f = transpose(f);
-
 f = f(1:size(f)/2);
-
 % The I-Channel spectrum is calculated
-
 spectrumI = (abs(fft(data_I)));
-
 spectrumI = spectrumI(1:size(spectrum)/2);
-
 % The Q-Channel spectrum is calculated
-
 spectrumQ = (abs(fft(data_Q)));
-
 spectrumQ = spectrumQ(1:size(spectrum)/2);
+```
 
 ### Matched Filtering
 
@@ -1397,7 +1361,7 @@ Figure 25 shows the heartbeat template, which will be referred to as the
 heartbeat kernel. \[[**21**](#Var12)\]
 
 <figure>
-<img src="assets/media/image26.emf"
+<img src="assets/media/image26.png"
 style="width:8.14151in;height:3.74152in" />
 <figcaption><p>Fig The heartbeat kernel used for Matched
 Filtering</p></figcaption>
@@ -1409,17 +1373,14 @@ In-Phase (I) and Quadrature (Q) channels matched filtering must be
 applied to both signals. The following code will implement this in
 MATLAB:
 
+``` matlab
 % I & Q channels are convolved with time-reversed conjugated hb_kernel
-
 match_filteredI = conv(data_I,hb_kernel(end:-1:1));
-
 match_filteredQ = conv(data_Q,hb_kernel(end:-1:1));
-
 % Ensures vector lengths are the same as the time vector
-
 match_filteredI = match_filtered(1:max(size(time)));
-
 match_filteredQ = match_filtered(1:max(size(time)));
+```
 
 Figure 26 shows the I-channel before and after matched filtering.
 Although the signal after matched filtering has been suppressed in terms
@@ -1427,7 +1388,7 @@ of its absolute magnitude, it is clear to see that the pattern has
 become clearer.
 
 <figure>
-<img src="assets/media/image27.emf"
+<img src="assets/media/image27.png"
 style="width:8.18627in;height:4.50943in" />
 <figcaption><p>Fig (a) I-Channel without Matched Filtering (b) I-Channel
 with Matched Filtering</p></figcaption>
@@ -1450,7 +1411,7 @@ from that in the I-Channel, the matched filter is not as effective. This
 is clearly shown in Figure 27.
 
 <figure>
-<img src="assets/media/image28.emf"
+<img src="assets/media/image28.png"
 style="width:8.16915in;height:4.5in" />
 <figcaption><p>Fig (a) Q-Channel without Matched Filtering (b) Q-Channel
 with Matched Filtering</p></figcaption>
@@ -1505,7 +1466,7 @@ $`\psi(x) = e^{- \frac{1}{2}x^{2}}\cos(5x)`$ \[Eqn 20\]
 Figure 28 shows the real part Morlet wavelet:
 
 <figure>
-<img src="assets/media/image29.emf"
+<img src="assets/media/image29.png"
 style="width:8.12236in;height:3.128in" />
 <figcaption><p>Fig Real part Morlet wavelet</p></figcaption>
 </figure>
@@ -1518,7 +1479,7 @@ used in this example. It consists of three sine waves of frequency 40
 Hz, 20 Hz and 10 Hz, concatenated to form one signal waveform.
 
 <figure>
-<img src="assets/media/image30.emf"
+<img src="assets/media/image30.png"
 style="width:8.16833in;height:3.6in" />
 <figcaption><p>Fig Non-stationary periodic signal</p></figcaption>
 </figure>
@@ -1529,27 +1490,19 @@ and specific frequency coefficients can be isolated.
 
 The following MATLAB code can be used to implement this example:
 
+``` matlab
 % Declaring the signal waveform
-
 t=0:0.001:0.5;
-
-y = \[sin(2\*pi\*40\*t) sin(2\*pi\*20\*t) sin(2\*pi\*10\*t)\];
-
+y = [sin(2*pi*40*t) sin(2*pi*20*t) sin(2*pi*10*t)];
 time=0:0.00098:1.5;
-
 % Declaring frequency range of CWT
-
 scale = (1:1:120);
-
 % The scale values are converted to their pseudo-frequencies
-
 F = scal2frq(scale,'morl',0.001);
-
 % CWT
-
-\[coeffs\] = cwt(y,scale,'morl', '3Dplot');
-
+[coeffs] = cwt(y,scale,'morl', '3Dplot');
 colormap(hot(256));
+```
 
 Figure 30 shows the 3D CWT plot of the example signal, where it is clear
 to see the three different frequencies of the signal and their
@@ -1558,7 +1511,7 @@ negative coefficient values. Positive coefficients correspond to peaks
 in the waveform and negative coefficients correspond to the troughs.
 
 <figure>
-<img src="assets/media/image31.wmf"
+<img src="assets/media/image31.png"
 style="width:8.22387in;height:3.83768in" />
 <figcaption><p>Fig The CWT of the example signal waveform (3D
 plot)</p></figcaption>
@@ -1585,7 +1538,7 @@ the waveform, which is achieved by taking a tranche of the CWT relating
 to a specific scale/frequency.
 
 <figure>
-<img src="assets/media/image33.emf"
+<img src="assets/media/image33.png"
 style="width:8.17641in;height:4.504in" />
 <figcaption><p>Fig (a) Isolated 40Hz section (b) Isolated 20Hz section
 (c) Isolated 10Hz section</p></figcaption>
@@ -1607,14 +1560,14 @@ Figure 33 shows the I-Channel signal obtained from the Doppler module
 and Figure 34 shows its corresponding 3D CWT.
 
 <figure>
-<img src="assets/media/image34.emf"
+<img src="assets/media/image34.png"
 style="width:8.16761in;height:3.64583in" />
 <figcaption><p>Fig I-Channel signal obtained from Doppler
 module</p></figcaption>
 </figure>
 
 <figure>
-<img src="assets/media/image35.wmf"
+<img src="assets/media/image35.png"
 style="width:8.20819in;height:3.72215in" />
 <figcaption><p>Fig The CWT of the I-Channel Doppler signal (3D
 plot)</p></figcaption>
@@ -1636,14 +1589,14 @@ tranches of the CWT can be isolated. Figure 36 shows the least prominent
 CWT tranche, whereas Figure 37 shows the most prominent CWT tranche.
 
 <figure>
-<img src="assets/media/image37.emf"
+<img src="assets/media/image37.png"
 style="width:8.13133in;height:4.47917in" />
 <figcaption><p>Fig (a) I-Channel Doppler signal (b) Least prominent CWT
 tranche</p></figcaption>
 </figure>
 
 <figure>
-<img src="assets/media/image38.emf"
+<img src="assets/media/image38.png"
 style="width:8.2091in;height:4.34375in" />
 <figcaption><p>Fig (a) I-Channel Doppler signal (b) Most prominent CWT
 tranche</p></figcaption>
@@ -1660,7 +1613,7 @@ therefore establish the heart rate. Figure 38 shows the frequency
 spectrum of this tranche.
 
 <figure>
-<img src="assets/media/image39.emf"
+<img src="assets/media/image39.png"
 style="width:8.1725in;height:3.44792in" />
 <figcaption><p>Fig Frequency Spectrum of the most prominent CWT tranche
 (Scale = 29)</p></figcaption>
@@ -1680,7 +1633,7 @@ heartbeats induce a different time-domain variation in the Q-Channel
 Doppler signal. Figure 39 shows this difference.
 
 <figure>
-<img src="assets/media/image40.emf"
+<img src="assets/media/image40.png"
 style="width:8.07292in;height:3.87725in" />
 <figcaption><p>Fig (a) I-Channel Doppler signal (b) Q-Channel Doppler
 signal</p></figcaption>
@@ -1708,14 +1661,14 @@ plot)</p></figcaption>
 </figure>
 
 <figure>
-<img src="assets/media/image42.emf"
+<img src="assets/media/image42.png"
 style="width:8.11321in;height:4.46919in" />
 <figcaption><p>Fig (a) Q-Channel Doppler signal (b) 1.4Hz frequency
 tranche (Scale = 29)</p></figcaption>
 </figure>
 
 <figure>
-<img src="assets/media/image43.emf"
+<img src="assets/media/image43.png"
 style="width:8.15094in;height:3.62304in" />
 <figcaption><p>Fig Frequency Spectrum of the most prominent CWT tranche
 (Scale = 29)</p></figcaption>
@@ -1781,7 +1734,7 @@ mathematical justification for this empirical rule, and it must be noted
 that it does not always hold.
 
 <figure>
-<img src="assets/media/image44.emf"
+<img src="assets/media/image44.png"
 style="width:7.7013in;height:4.49983in" />
 <figcaption><p>Fig Rule of thumb</p></figcaption>
 </figure>
@@ -1796,7 +1749,7 @@ I-Channel Doppler signal with breathing and Figure 45 shows its
 respective 2D CWT.
 
 <figure>
-<img src="assets/media/image45.emf"
+<img src="assets/media/image45.png"
 style="width:8.10707in;height:3.64935in" />
 <figcaption><p>Fig I-Channel Doppler signal with
 breathing</p></figcaption>
@@ -1828,14 +1781,14 @@ heartbeat frequency variation. Figure 48 shows their respective
 frequency spectrums.
 
 <figure>
-<img src="assets/media/image48.emf"
+<img src="assets/media/image48.png"
 style="width:7.83255in;height:4.18182in" />
 <figcaption><p>Fig (a) I-Channel breathing (b) I-Channel
 heartbeats</p></figcaption>
 </figure>
 
 <figure>
-<img src="assets/media/image49.emf"
+<img src="assets/media/image49.png"
 style="width:8.11068in;height:4.29167in" />
 <figcaption><p>Fig (a) Breathing frequency spectrum (b) Heartbeats
 frequency spectrum</p></figcaption>
@@ -1852,14 +1805,14 @@ Figure 50 shows the heartbeat frequency variations, with its respective
 frequency spectrum.
 
 <figure>
-<img src="assets/media/image50.emf"
+<img src="assets/media/image50.png"
 style="width:8.08333in;height:4.2772in" />
 <figcaption><p>Fig (a) Q-Channel breathing (b) Q-Channel breathing
 frequency spectrum</p></figcaption>
 </figure>
 
 <figure>
-<img src="assets/media/image51.emf"
+<img src="assets/media/image51.png"
 style="width:8.125in;height:4.32265in" />
 <figcaption><p>Fig (a) Q-Channel heartbeats (b) Q-Channel heartbeats
 frequency spectrum</p></figcaption>
@@ -1883,7 +1836,7 @@ the conclusive heart rate. Figure 51 shows the heartbeat frequency
 variations of the complex signal, along with its frequency spectrum.
 
 <figure>
-<img src="assets/media/image52.emf"
+<img src="assets/media/image52.png"
 style="width:8.14583in;height:4.3563in" />
 <figcaption><p>Fig (a) Complex signal heartbeats (b) Complex signal
 heartbeats frequency spectrum</p></figcaption>
@@ -1916,7 +1869,7 @@ deliberate breathing. It is clear to see the movement associated with
 breathing.
 
 <figure>
-<img src="assets/media/image53.emf"
+<img src="assets/media/image53.png"
 style="width:7.3155in;height:4.2987in" />
 <figcaption><p>Fig Unwrapped phase for deep and deliberate
 breathing</p></figcaption>
@@ -2311,7 +2264,7 @@ operations and human representation, and does not change the binary data
 in any way.
 
 <figure>
-<img src="assets/media/image58.emf"
+<img src="assets/media/image58.png"
 style="width:2.8855in;height:0.51515in" />
 <figcaption><p>Fig Q15 fixed-point format</p></figcaption>
 </figure>
@@ -2329,7 +2282,7 @@ Signal amplitude
 Spectrum magnitude
 
 <figure>
-<img src="assets/media/image59.emf"
+<img src="assets/media/image59.png"
 style="width:7.18137in;height:4.20779in" />
 <figcaption><p>Dominant frequency</p></figcaption>
 </figure>
@@ -2427,7 +2380,7 @@ displaying. As such, the portable device is completely stand-alone as
 specified.
 
 <figure>
-<img src="assets/media/image60.emf"
+<img src="assets/media/image60.png"
 style="width:7.35065in;height:4.51948in" />
 <figcaption><p>Fig I &amp; Q Channel algorithm
 operations</p></figcaption>
@@ -2571,7 +2524,7 @@ results is by plotting them along with the finger sensor results over a
 certain length of time. This is shown in Figure 62.
 
 <figure>
-<img src="assets/media/image63.emf"
+<img src="assets/media/image63.png"
 style="width:8.19603in;height:4.02083in" />
 <figcaption><p>Fig Doppler &amp; Finger sensor results without
 breathing</p></figcaption>
@@ -2585,7 +2538,7 @@ breath from 50 seconds onwards. Figure 63 shows the same plot for a
 subject who is breathing throughout the measurements.
 
 <figure>
-<img src="assets/media/image64.emf"
+<img src="assets/media/image64.png"
 style="width:8.17579in;height:4.0571in" />
 <figcaption><p>Fig Doppler &amp; Finger sensor results with
 breathing</p></figcaption>
@@ -3014,7 +2967,7 @@ style="width:7.39669in;height:4.53728in" />
 # Appendix B
 
 <figure>
-<img src="assets/media/image70.emf"
+<img src="assets/media/image70.png"
 style="width:7.35065in;height:6.73509in" />
 <figcaption><p>Table B1 BOM used in final PCB</p></figcaption>
 </figure>

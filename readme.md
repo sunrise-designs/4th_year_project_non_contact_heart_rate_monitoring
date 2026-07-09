@@ -1,4 +1,4 @@
-This is my 4th year final group project report.
+This is my 4th year final group project report (UCL, 2012)
 
 We tried a variety of signal processing techniques to see if we could detect the signature of the heart beat in the  RF doppler wave reflected from the human body. The basic principle is absolutely sound - however for a person who is awake and moving, it's like trying to listen to a small mechanical wristwatch during a rock concert.
 
