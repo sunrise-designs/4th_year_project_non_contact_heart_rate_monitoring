@@ -1,123 +1,4 @@
-# Table of Contents
 
-[1. Introduction [3](#introduction)](#introduction)
-
-[2. Project Aim [3](#project-aim)](#project-aim)
-
-[3. Theory [4](#theory)](#theory)
-
-[3.1. Heart [4](#heart)](#heart)
-
-[3.1.1. Mechanics of the Heart
-[4](#mechanics-of-the-heart)](#mechanics-of-the-heart)
-
-[3.1.2. Cardiac Cycle [5](#cardiac-cycle)](#cardiac-cycle)
-
-[3.1.3. Arrhythmia [7](#arrhythmia)](#arrhythmia)
-
-[3.2. The Doppler-Effect [8](#the-doppler-effect)](#the-doppler-effect)
-
-[3.3. Doppler Radar [10](#doppler-radar)](#doppler-radar)
-
-[3.4. Antenna [14](#antenna)](#antenna)
-
-[4. Prototype Design [16](#prototype-design)](#prototype-design)
-
-[4.1. Universal Radio Software Peripheral (URSP)
-[16](#universal-radio-software-peripheral-ursp)](#universal-radio-software-peripheral-ursp)
-
-[4.2. Breadboard Design [16](#breadboard-design)](#breadboard-design)
-
-[4.2.1. Doppler Module [16](#doppler-module)](#doppler-module)
-
-[4.2.2. Filter Stage [16](#filter-stage)](#filter-stage)
-
-[4.2.3. Gain Stage [17](#gain-stage)](#gain-stage)
-
-[4.2.4. Prototype Schematic
-[18](#prototype-schematic)](#prototype-schematic)
-
-[4.3. Prototype PCB Design
-[19](#prototype-pcb-design)](#prototype-pcb-design)
-
-[5. Final Product Design
-[20](#final-product-design)](#final-product-design)
-
-[5.1. Analog-to-Digital Converter (ADC)
-[20](#analog-to-digital-converter-adc)](#analog-to-digital-converter-adc)
-
-[5.2. Microcontroller [20](#microcontroller)](#microcontroller)
-
-[5.3. Power Supply [22](#power-supply)](#power-supply)
-
-[5.3.1. Considerations [22](#considerations)](#considerations)
-
-[5.3.2. Battery Options [22](#battery-options)](#battery-options)
-
-[5.4. Finger Sensor [23](#finger-sensor)](#finger-sensor)
-
-[5.5. PCB Design [24](#pcb-design)](#pcb-design)
-
-[6. Algorithm [26](#algorithm)](#algorithm)
-
-[6.1. Development – No Breathing
-[27](#development-no-breathing)](#development-no-breathing)
-
-[6.1.1. Oversampling & Averaging
-[27](#oversampling-averaging)](#oversampling-averaging)
-
-[6.1.2. Spectrum Analysis [30](#spectrum-analysis)](#spectrum-analysis)
-
-[6.1.3. Matched Filtering [32](#matched-filtering)](#matched-filtering)
-
-[6.1.4. Continuous Wavelet Transform (CWT)
-[34](#continuous-wavelet-transform-cwt)](#continuous-wavelet-transform-cwt)
-
-[6.2. Development – Breathing
-[45](#development-breathing)](#development-breathing)
-
-[6.2.1. Spectrum Analysis
-[45](#spectrum-analysis-1)](#spectrum-analysis-1)
-
-[6.2.2. Continuous Wavelet Transform (CWT)
-[47](#continuous-wavelet-transform-cwt-1)](#continuous-wavelet-transform-cwt-1)
-
-[6.2.3. Unwrapped Phase [52](#unwrapped-phase)](#unwrapped-phase)
-
-[6.3. Implementation [53](#implementation)](#implementation)
-
-[6.3.1. Software Structure
-[53](#software-structure)](#software-structure)
-
-[6.3.2. Serial Link [54](#serial-link)](#serial-link)
-
-[6.3.3. Data Sampling [54](#data-sampling)](#data-sampling)
-
-[6.3.4. Sample Value Conditioning & Averaging
-[56](#sample-value-conditioning-averaging)](#sample-value-conditioning-averaging)
-
-[6.3.5. Sampling Noise [58](#sampling-noise)](#sampling-noise)
-
-[6.3.6. Data Buffering [59](#data-buffering)](#data-buffering)
-
-[6.3.7. Floating Point Calculations
-[59](#floating-point-calculations)](#floating-point-calculations)
-
-[6.3.8. Algorithm Outline [61](#algorithm-outline)](#algorithm-outline)
-
-[7. Results [66](#results)](#results)
-
-[8. Conclusion [68](#conclusion)](#conclusion)
-
-[9. Further Work [69](#further-work)](#further-work)
-
-[10. Project Management [70](#project-management)](#project-management)
-
-[Bibliography [72](#_Toc323221586)](#_Toc323221586)
-
-[Appendix A [74](#appendix-a)](#appendix-a)
-
-[Appendix B [79](#appendix-b)](#appendix-b)
 
 # Introduction
 
@@ -2990,3 +2871,124 @@ style="width:7.35065in;height:6.73509in" />
 | Add transistor enable switches for both LCD backlight and IR LED, controlled by the μC. |
 
 Figure B2 Known mistakes and suggested improvements for final PCB
+
+# Table of Contents
+
+[1. Introduction [3](#introduction)](#introduction)
+
+[2. Project Aim [3](#project-aim)](#project-aim)
+
+[3. Theory [4](#theory)](#theory)
+
+[3.1. Heart [4](#heart)](#heart)
+
+[3.1.1. Mechanics of the Heart
+[4](#mechanics-of-the-heart)](#mechanics-of-the-heart)
+
+[3.1.2. Cardiac Cycle [5](#cardiac-cycle)](#cardiac-cycle)
+
+[3.1.3. Arrhythmia [7](#arrhythmia)](#arrhythmia)
+
+[3.2. The Doppler-Effect [8](#the-doppler-effect)](#the-doppler-effect)
+
+[3.3. Doppler Radar [10](#doppler-radar)](#doppler-radar)
+
+[3.4. Antenna [14](#antenna)](#antenna)
+
+[4. Prototype Design [16](#prototype-design)](#prototype-design)
+
+[4.1. Universal Radio Software Peripheral (URSP)
+[16](#universal-radio-software-peripheral-ursp)](#universal-radio-software-peripheral-ursp)
+
+[4.2. Breadboard Design [16](#breadboard-design)](#breadboard-design)
+
+[4.2.1. Doppler Module [16](#doppler-module)](#doppler-module)
+
+[4.2.2. Filter Stage [16](#filter-stage)](#filter-stage)
+
+[4.2.3. Gain Stage [17](#gain-stage)](#gain-stage)
+
+[4.2.4. Prototype Schematic
+[18](#prototype-schematic)](#prototype-schematic)
+
+[4.3. Prototype PCB Design
+[19](#prototype-pcb-design)](#prototype-pcb-design)
+
+[5. Final Product Design
+[20](#final-product-design)](#final-product-design)
+
+[5.1. Analog-to-Digital Converter (ADC)
+[20](#analog-to-digital-converter-adc)](#analog-to-digital-converter-adc)
+
+[5.2. Microcontroller [20](#microcontroller)](#microcontroller)
+
+[5.3. Power Supply [22](#power-supply)](#power-supply)
+
+[5.3.1. Considerations [22](#considerations)](#considerations)
+
+[5.3.2. Battery Options [22](#battery-options)](#battery-options)
+
+[5.4. Finger Sensor [23](#finger-sensor)](#finger-sensor)
+
+[5.5. PCB Design [24](#pcb-design)](#pcb-design)
+
+[6. Algorithm [26](#algorithm)](#algorithm)
+
+[6.1. Development – No Breathing
+[27](#development-no-breathing)](#development-no-breathing)
+
+[6.1.1. Oversampling & Averaging
+[27](#oversampling-averaging)](#oversampling-averaging)
+
+[6.1.2. Spectrum Analysis [30](#spectrum-analysis)](#spectrum-analysis)
+
+[6.1.3. Matched Filtering [32](#matched-filtering)](#matched-filtering)
+
+[6.1.4. Continuous Wavelet Transform (CWT)
+[34](#continuous-wavelet-transform-cwt)](#continuous-wavelet-transform-cwt)
+
+[6.2. Development – Breathing
+[45](#development-breathing)](#development-breathing)
+
+[6.2.1. Spectrum Analysis
+[45](#spectrum-analysis-1)](#spectrum-analysis-1)
+
+[6.2.2. Continuous Wavelet Transform (CWT)
+[47](#continuous-wavelet-transform-cwt-1)](#continuous-wavelet-transform-cwt-1)
+
+[6.2.3. Unwrapped Phase [52](#unwrapped-phase)](#unwrapped-phase)
+
+[6.3. Implementation [53](#implementation)](#implementation)
+
+[6.3.1. Software Structure
+[53](#software-structure)](#software-structure)
+
+[6.3.2. Serial Link [54](#serial-link)](#serial-link)
+
+[6.3.3. Data Sampling [54](#data-sampling)](#data-sampling)
+
+[6.3.4. Sample Value Conditioning & Averaging
+[56](#sample-value-conditioning-averaging)](#sample-value-conditioning-averaging)
+
+[6.3.5. Sampling Noise [58](#sampling-noise)](#sampling-noise)
+
+[6.3.6. Data Buffering [59](#data-buffering)](#data-buffering)
+
+[6.3.7. Floating Point Calculations
+[59](#floating-point-calculations)](#floating-point-calculations)
+
+[6.3.8. Algorithm Outline [61](#algorithm-outline)](#algorithm-outline)
+
+[7. Results [66](#results)](#results)
+
+[8. Conclusion [68](#conclusion)](#conclusion)
+
+[9. Further Work [69](#further-work)](#further-work)
+
+[10. Project Management [70](#project-management)](#project-management)
+
+[Bibliography [72](#_Toc323221586)](#_Toc323221586)
+
+[Appendix A [74](#appendix-a)](#appendix-a)
+
+[Appendix B [79](#appendix-b)](#appendix-b)
